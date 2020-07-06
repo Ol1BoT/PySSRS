@@ -203,12 +203,21 @@ class SSRS():
         # Set parameters
         params = ''
         for k, v in parameters['parameters'].items():
-            params = params + '''
-            <rep:ParameterValue>
-               <rep:Name>%s</rep:Name>
-               <rep:Value>%s</rep:Value>
-            </rep:ParameterValue>
-            ''' % (k, v)
+            if isinstance(v, list):
+                for x in v:
+                    params = params + '''
+                    <rep:ParameterValue>
+                    <rep:Name>%s</rep:Name>
+                    <rep:Value>%s</rep:Value>
+                    </rep:ParameterValue>
+                    ''' % (k, x)
+            else:
+                params = params + '''
+                <rep:ParameterValue>
+                <rep:Name>%s</rep:Name>
+                <rep:Value>%s</rep:Value>
+                </rep:ParameterValue>
+                ''' % (k, v)
 
         param_xml = schemas.xml_Execute_Report_Parameter
         param_xml = param_xml.format(LoadedReport.ExecutionID, params)
